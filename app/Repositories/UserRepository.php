@@ -53,4 +53,18 @@ class UserRepository
     {
         return User::with(['history', 'photos'])->where('ID_User', (int)$userId)->firstOrFail();
     }
+
+    /**
+     * @param array $payload
+     *
+     * @return User
+     */
+    public function create(array $payload)
+    {
+        $user = new User();
+        $user->fill($payload);
+        $user->save();
+
+        return $user->fresh();
+    }
 }

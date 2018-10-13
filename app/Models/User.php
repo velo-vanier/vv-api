@@ -11,6 +11,16 @@ class User extends Model
 
     protected $primaryKey = 'ID_User';
 
+    public $fillable = [
+        'Role',
+        'FirstName',
+        'LastName',
+        'Email',
+        'Phone',
+        'Password',
+        'ParentID'
+    ];
+
     /**
      * Keys to hide from the payload
      *
