@@ -60,13 +60,14 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'Role'      => 'string|required|in:Staff,Volunteer,Borrower',
-            'FirstName' => 'string|required|max:100',
-            'LastName'  => 'string|required|max:100',
-            'Email'     => 'email|required|max:100',
-            'Phone'     => 'string|required|max:100',
-            'Password'  => 'string|nullable|max:255',
-            'ParentID'  => 'integer|nullable'
+            'Role'       => 'string|required|in:Staff,Volunteer,Borrower',
+            'FirstName'  => 'string|required|max:100',
+            'LastName'   => 'string|required|max:100',
+            'Email'      => 'email|required|max:100',
+            'Phone'      => 'string|required|max:100',
+            'PostalCode' => 'string|nullable|regex:/^K1L/',
+            'Password'   => 'string|nullable|max:255',
+            'ParentID'   => 'integer|nullable'
         ]);
 
         if ($validator->fails()) {
@@ -91,11 +92,12 @@ class UserController extends Controller
     public function update($userId, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'FirstName' => 'string|required|max:100',
-            'LastName'  => 'string|required|max:100',
-            'Email'     => 'email|required|max:100',
-            'Phone'     => 'string|required|max:100',
-            'Password'  => 'string|nullable|max:255'
+            'FirstName'  => 'string|required|max:100',
+            'LastName'   => 'string|required|max:100',
+            'Email'      => 'email|required|max:100',
+            'Phone'      => 'string|required|max:100',
+            'PostalCode' => 'string|nullable|regex:/^K1L/',
+            'Password'   => 'string|nullable|max:255'
         ]);
 
         if ($validator->fails()) {

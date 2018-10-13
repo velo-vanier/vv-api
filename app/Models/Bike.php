@@ -25,7 +25,14 @@ class Bike extends Model
         'Color',
         'Class',
         'Brand',
+        'BellHorn',
+        'Reflectors',
+        'Lights',
         'ID_Status'
+    ];
+
+    public $casts = [
+        'BellHorn' => 'boolean'
     ];
 
     /**

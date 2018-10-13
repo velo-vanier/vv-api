@@ -64,6 +64,11 @@ class UserRepository
     public function create(array $payload)
     {
         $user = new User();
+
+        if (isset($payload['PostalCode'])) {
+            $payload['PostalCode'] = $user->formatPostalCode($payload['PostalCode']);
+        }
+
         $user->fill($payload);
         $user->save();
 
@@ -81,6 +86,13 @@ class UserRepository
     public function update($userId, array $payload)
     {
         $user = $this->fetchById($userId);
+
+        //cannot change role after creation
+        unset($payload['Role']);
+
+        if (isset($payload['PostalCode'])) {
+            $payload['PostalCode'] = $user->formatPostalCode($payload['PostalCode']);
+        }
 
         $user->fill($payload);
         $user->save();

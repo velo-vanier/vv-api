@@ -17,16 +17,22 @@ class User extends Model
         'LastName',
         'Email',
         'Phone',
+        'PostalCode',
         'Password',
         'ParentID'
     ];
 
     /**
-     * Keys to hide from the payload
+     * Strip spaces from postal code, uppercase
      *
-     * @var array
+     * @param $postalCode
+     *
+     * @return string
      */
-    public $hidden = [];
+    public function formatPostalCode($postalCode)
+    {
+        return str_replace(' ', '', strtoupper($postalCode));
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
