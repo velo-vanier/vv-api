@@ -26,6 +26,6 @@ class AccessoryRepository
      */
     public function fetchById($accessoryId)
     {
-        return Accessory::where('ID_Assce', (int)$accessoryId)->firstOrFail();
+        return Accessory::where('ID_Accessory', (int)$accessoryId)->firstOrFail();
     }
 }

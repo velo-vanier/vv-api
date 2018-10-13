@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Accessory extends Model
 {
-    public $table = 'Accessorie';
+    public $table = 'Accessory';
 
     /**
      * Keys to hide from the payload
