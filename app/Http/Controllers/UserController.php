@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->userRepository->fetchAll($request->search);
+        return $this->userRepository->fetchAll($request->search, $request->filters);
     }
 
     /**

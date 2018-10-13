@@ -11,6 +11,7 @@ class BikeRepository
      * Return a paginated list of all bikes in the system
      *
      * @param string $search
+     * @param array  $filters
      *
      * @return Collection
      */
@@ -29,8 +30,8 @@ class BikeRepository
 
         if ($filters) {
             foreach ($filters as $key => $value) {
-                switch ($key) {
-                    case 'ID_User':
+                switch (strtolower($key)) {
+                    case 'id_user':
                         $bike = $bike->whereHas('history', function ($q) use ($value) {
                             $q->where('ID_BikeUser', $value);
                         });
