@@ -38,6 +38,6 @@ class UserRepository
      */
     public function fetchById($userId)
     {
-        return User::with('photos')->where('ID_User', (int)$userId)->firstOrFail();
+        return User::with(['history', 'photos'])->where('ID_User', (int)$userId)->firstOrFail();
     }
 }

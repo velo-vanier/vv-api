@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     public $table = 'User';
+    public $timestamps = false;
+
+    protected $primaryKey = 'ID_User';
 
     /**
      * Keys to hide from the payload
@@ -14,6 +17,14 @@ class User extends Model
      * @var array
      */
     public $hidden = [];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function history()
+    {
+        return $this->hasMany(BikeHistory::class, 'ID_BikeUser', 'ID_User');
+    }
 
     /**
      * Retrieve the photos attached to the user
