@@ -8,6 +8,7 @@ class Bike extends Model
 {
     public $table = 'Bike';
     public $timestamps = false;
+
     protected $primaryKey = 'ID_Bike';
 
     /**
@@ -54,5 +55,22 @@ class Bike extends Model
     public function status()
     {
         return $this->belongsTo(Status::class, 'ID_Status', 'ID_Status');
+    }
+
+    /**
+     * Retrieve the photos attached to the bike
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function photos()
+    {
+        return $this->hasManyThrough(
+            Photo::class,
+            BikePhoto::class,
+            'ID_Bike',
+            'ID_Photo',
+            'ID_Bike',
+            'ID_Photo'
+        );
     }
 }

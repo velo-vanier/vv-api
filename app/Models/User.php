@@ -14,4 +14,21 @@ class User extends Model
      * @var array
      */
     public $hidden = [];
+
+    /**
+     * Retrieve the photos attached to the user
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function photos()
+    {
+        return $this->hasManyThrough(
+            Photo::class,
+            BikePhoto::class,
+            'ID_Bike',
+            'ID_Photo',
+            'ID_Bike',
+            'ID_Photo'
+        );
+    }
 }

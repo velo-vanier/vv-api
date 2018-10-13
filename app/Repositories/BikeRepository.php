@@ -26,7 +26,7 @@ class BikeRepository
      */
     public function fetchById($bikeId)
     {
-        return Bike::where('ID_Bike', (int)$bikeId)->firstOrFail();
+        return Bike::with('photos')->where('ID_Bike', (int)$bikeId)->firstOrFail();
     }
 
     /**
