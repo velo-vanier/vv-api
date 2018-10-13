@@ -27,11 +27,13 @@ class UserController extends Controller
     /**
      * List all users in the system
      *
+     * @param Request $request
+     *
      * @return Collection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->userRepository->fetchAll();
+        return $this->userRepository->fetchAll($request->search);
     }
 
     /**
