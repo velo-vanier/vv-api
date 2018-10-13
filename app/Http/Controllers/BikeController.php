@@ -58,7 +58,6 @@ class BikeController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'BikeLabel'    => 'string|required|max:8',
             'SerialNumber' => 'string|required|max:64',
             'Description'  => 'string|required|max:128',
             'GearCount'    => 'integer|required',

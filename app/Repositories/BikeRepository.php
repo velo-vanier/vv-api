@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Bike;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class BikeRepository
 {
@@ -62,8 +63,14 @@ class BikeRepository
      */
     public function create(array $payload)
     {
+        //get the expected identifier for the bike
+        $max = array_get(Bike::select(DB::raw('max(ID_Bike) as id'))->first()->toArray(), 'id', 1) + 1;
+
         $bike = new Bike();
         $bike->fill($payload);
+
+        $bike->generateBikeLabel($max);
+
         $bike->save();
 
         return $bike->fresh();

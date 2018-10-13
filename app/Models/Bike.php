@@ -17,7 +17,6 @@ class Bike extends Model
      * @var array
      */
     public $fillable = [
-        'BikeLabel',
         'SerialNumber',
         'Description',
         'GearCount',
@@ -28,6 +27,16 @@ class Bike extends Model
         'Brand',
         'ID_Status'
     ];
+
+    /**
+     * Generate and apply the bike label using a max integer
+     *
+     * @param int $max
+     */
+    public function generateBikeLabel($max = 1)
+    {
+        $this->BikeLabel = ($this->Class ?? 'U') . '-' . $max;
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
