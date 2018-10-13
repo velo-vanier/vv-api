@@ -55,7 +55,7 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return array
+     * @return User
      */
     public function store(Request $request)
     {
@@ -76,12 +76,6 @@ class UserController extends Controller
         try {
             return $this->userRepository->create($request->all());
         } catch (QueryException $e) {
-            /*
-            if ($e->getCode() == '23000') {
-                return response(['error' => ['Duplicate key error']], '422');
-            }
-            */
-
             return response(['error' => [$e->getMessage()]], '422');
         }
     }
@@ -92,10 +86,26 @@ class UserController extends Controller
      * @param         $userId
      * @param Request $request
      *
-     * @return array
+     * @return User
      */
     public function update($userId, Request $request)
     {
-        return array_merge(['id' => $userId], $request->all());
+        $validator = Validator::make($request->all(), [
+            'FirstName' => 'string|required|max:100',
+            'LastName'  => 'string|required|max:100',
+            'Email'     => 'email|required|max:100',
+            'Phone'     => 'string|required|max:100',
+            'Password'  => 'string|nullable|max:255'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), '422');
+        }
+
+        try {
+            return $this->userRepository->update($userId, $request->all());
+        } catch (QueryException $e) {
+            return response(['error' => [$e->getMessage()]], '422');
+        }
     }
 }

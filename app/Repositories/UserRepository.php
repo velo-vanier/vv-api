@@ -55,6 +55,8 @@ class UserRepository
     }
 
     /**
+     * Create a new user
+     *
      * @param array $payload
      *
      * @return User
@@ -62,6 +64,24 @@ class UserRepository
     public function create(array $payload)
     {
         $user = new User();
+        $user->fill($payload);
+        $user->save();
+
+        return $user->fresh();
+    }
+
+    /**
+     * Update a user's details
+     *
+     * @param       $userId
+     * @param array $payload
+     *
+     * @return User
+     */
+    public function update($userId, array $payload)
+    {
+        $user = $this->fetchById($userId);
+
         $user->fill($payload);
         $user->save();
 
