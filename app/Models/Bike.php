@@ -58,6 +58,14 @@ class Bike extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function history()
+    {
+        return $this->hasMany(BikeHistory::class, 'ID_Bike', 'ID_Bike');
+    }
+
+    /**
      * Retrieve the photos attached to the bike
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
