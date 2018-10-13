@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Bike;
 use App\Repositories\BikeRepository;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class BikeController extends Controller
 {
@@ -51,11 +53,38 @@ class BikeController extends Controller
      *
      * @param Request $request
      *
-     * @return array
+     * @return Bike
      */
     public function store(Request $request)
     {
-        return $request->all();
+        $validator = Validator::make($request->all(), [
+            'BikeLabel'    => 'string|required|max:8',
+            'SerialNumber' => 'string|required|max:64',
+            'Description'  => 'string|required|max:128',
+            'GearCount'    => 'integer|required',
+            'TireMaxPSI'   => 'integer|required',
+            'TireSize'     => 'string|nullable|max:45',
+            'Color'        => 'string|nullable|max:45',
+            'Class'        => 'string|nullable|max:45',
+            'Brand'        => 'string|nullable|max:45',
+            'ID_Status'    => 'integer|required'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), '422');
+        }
+
+        try {
+            return $this->bikeRepository->create($request->all());
+        } catch (QueryException $e) {
+            /*
+            if ($e->getCode() == '23000') {
+                return response(['error' => ['Duplicate key error']], '422');
+            }
+            */
+
+            return response(['error' => [$e->getMessage()]], '422');
+        }
     }
 
     /**

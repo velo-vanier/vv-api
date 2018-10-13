@@ -28,4 +28,18 @@ class BikeRepository
     {
         return Bike::where('ID_Bike', (int)$bikeId)->firstOrFail();
     }
+
+    /**
+     * @param array $payload
+     *
+     * @return Bike
+     */
+    public function create(array $payload)
+    {
+        $bike = new Bike();
+        $bike->fill($payload);
+        $bike->save();
+
+        return $bike->fresh();
+    }
 }

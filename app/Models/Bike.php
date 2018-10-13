@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Bike extends Model
 {
     public $table = 'Bike';
+    public $timestamps = false;
+    protected $primaryKey = 'ID_Bike';
 
     /**
      * Keys to hide from the payload
@@ -14,6 +16,24 @@ class Bike extends Model
      * @var array
      */
     public $hidden = [
+        'ID_Status'
+    ];
+
+    /**
+     * Set mass assignable attributes
+     *
+     * @var array
+     */
+    public $fillable = [
+        'BikeLabel',
+        'SerialNumber',
+        'Description',
+        'GearCount',
+        'TireMaxPSI',
+        'TireSize',
+        'Color',
+        'Class',
+        'Brand',
         'ID_Status'
     ];
 
