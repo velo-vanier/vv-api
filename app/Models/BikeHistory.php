@@ -16,6 +16,15 @@ class BikeHistory extends Model
     ];
 
     /**
+     * @var array
+     */
+    public $with = [
+        'user',
+        'staff',
+        'accessories'
+    ];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function bike()
@@ -28,7 +37,7 @@ class BikeHistory extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'ID_User', 'ID_BikeUser');
+        return $this->belongsTo(User::class, 'ID_BikeUser', 'ID_User');
     }
 
     /**
@@ -36,7 +45,23 @@ class BikeHistory extends Model
      */
     public function staff()
     {
-        return $this->belongsTo(User::class, 'ID_User', 'ID_StaffUser');
+        return $this->belongsTo(User::class, 'ID_StaffUser', 'ID_User');
     }
 
+    /**
+     * Retrieve the accessories attached to the bike history element
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function accessories()
+    {
+        return $this->hasManyThrough(
+            Accessory::class,
+            AccessoryHistory::class,
+            'ID_BikeHistory',
+            'ID_Accessory',
+            'ID_BikeHistory',
+            'ID_Assce'
+        );
+    }
 }

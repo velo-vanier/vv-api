@@ -12,15 +12,6 @@ class Bike extends Model
     protected $primaryKey = 'ID_Bike';
 
     /**
-     * Keys to hide from the payload
-     *
-     * @var array
-     */
-    public $hidden = [
-        'ID_Status'
-    ];
-
-    /**
      * Set mass assignable attributes
      *
      * @var array
@@ -37,25 +28,6 @@ class Bike extends Model
         'Brand',
         'ID_Status'
     ];
-
-    /**
-     * Additional properties to include in the response
-     *
-     * @var array
-     */
-    public $with = [
-        'status'
-    ];
-
-    /**
-     * Relationship with status table, using status ID
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function status()
-    {
-        return $this->belongsTo(Status::class, 'ID_Status', 'ID_Status');
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
