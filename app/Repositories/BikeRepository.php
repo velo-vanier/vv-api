@@ -14,15 +14,29 @@ class BikeRepository
      *
      * @return Collection
      */
-    public function fetchAll($search = '')
+    public function fetchAll($search = '', $filters = [])
     {
         $bike = new Bike();
 
         if ($search) {
             //if a search query is provided, look at the label, serial or description
-            $bike = $bike->where('BikeLabel', 'LIKE', '%' . $search . '%')
-                         ->orWhere('SerialNumber', 'LIKE', '%' . $search . '%')
-                         ->orWhere('Description', 'LIKE', '%' . $search . '%');
+            $bike = $bike->where(function ($q) use ($search) {
+                $q->where('BikeLabel', 'LIKE', '%' . $search . '%')
+                  ->orWhere('SerialNumber', 'LIKE', '%' . $search . '%')
+                  ->orWhere('Description', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        if ($filters) {
+            foreach ($filters as $key => $value) {
+                switch ($key) {
+                    case 'ID_User':
+                        $bike = $bike->whereHas('history', function ($q) use ($value) {
+                            $q->where('ID_BikeUser', $value);
+                        });
+                        break;
+                }
+            }
         }
 
         return $bike->paginate(25);

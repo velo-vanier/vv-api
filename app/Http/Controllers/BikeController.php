@@ -33,7 +33,7 @@ class BikeController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->bikeRepository->fetchAll($request->search);
+        return $this->bikeRepository->fetchAll($request->search, $request->filters);
     }
 
     /**
