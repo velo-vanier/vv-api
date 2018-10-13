@@ -2,18 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\BikeRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class BikeController extends Controller
 {
     /**
+     * @var BikeRepository
+     */
+    protected $bikeRepository;
+
+    /**
+     * BikeController constructor.
+     *
+     * @param BikeRepository $bikeRepository
+     */
+    public function __construct(BikeRepository $bikeRepository)
+    {
+        $this->bikeRepository = $bikeRepository;
+    }
+
+    /**
      * List all bikes in the system
      *
-     * @return array
+     * @return Collection
      */
     public function index()
     {
-        return ['data' => []];
+        return $this->bikeRepository->fetchAll();
     }
 
     /**
@@ -25,7 +42,7 @@ class BikeController extends Controller
      */
     public function show($bikeId)
     {
-        return ['id' => $bikeId];
+        return $this->bikeRepository->fetchById($bikeId);
     }
 
     /**

@@ -17,4 +17,12 @@ class Status extends Model
         'ID_Status',
         'Name'
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function bike()
+    {
+        return $this->hasMany(Bike::class, 'ID_Status', 'ID_Status');
+    }
 }
