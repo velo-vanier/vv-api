@@ -2,18 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class UserController extends Controller
 {
     /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
+     * UserController constructor.
+     *
+     * @param UserRepository $userRepository
+     */
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    /**
      * List all users in the system
      *
-     * @return array
+     * @return Collection
      */
     public function index()
     {
-        return ['data' => []];
+        return $this->userRepository->fetchAll();
     }
 
     /**
@@ -21,11 +39,11 @@ class UserController extends Controller
      *
      * @param $userId
      *
-     * @return array
+     * @return User
      */
     public function show($userId)
     {
-        return ['id' => $userId];
+        return $this->userRepository->fetchById($userId);
     }
 
     /**

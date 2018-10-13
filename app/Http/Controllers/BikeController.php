@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bike;
 use App\Repositories\BikeRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -38,7 +39,7 @@ class BikeController extends Controller
      *
      * @param $bikeId
      *
-     * @return array
+     * @return Bike
      */
     public function show($bikeId)
     {
