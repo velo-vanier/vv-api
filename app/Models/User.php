@@ -31,6 +31,14 @@ class User extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function dependents()
+    {
+        return $this->hasMany(User::class, 'ParentID', 'ID_User');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function history()
     {
         return $this->hasMany(BikeHistory::class, 'ID_BikeUser', 'ID_User');

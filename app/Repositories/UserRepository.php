@@ -51,7 +51,7 @@ class UserRepository
      */
     public function fetchById($userId)
     {
-        return User::with(['history', 'photos'])->where('ID_User', (int)$userId)->firstOrFail();
+        return User::with(['dependents', 'history', 'photos'])->where('ID_User', (int)$userId)->firstOrFail();
     }
 
     /**
