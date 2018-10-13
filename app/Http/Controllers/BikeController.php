@@ -13,7 +13,7 @@ class BikeController extends Controller
      */
     public function index()
     {
-        return ['bikes' => []];
+        return ['data' => []];
     }
 
     /**
