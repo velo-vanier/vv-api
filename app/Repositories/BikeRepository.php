@@ -10,11 +10,22 @@ class BikeRepository
     /**
      * Return a paginated list of all bikes in the system
      *
+     * @param string $search
+     *
      * @return Collection
      */
-    public function fetchAll()
+    public function fetchAll($search = '')
     {
-        return Bike::paginate(25);
+        $bike = new Bike();
+
+        if ($search) {
+            //if a search query is provided, look at the label, serial or description
+            $bike = $bike->where('BikeLabel', 'LIKE', '%' . $search . '%')
+                         ->orWhere('SerialNumber', 'LIKE', '%' . $search . '%')
+                         ->orWhere('Description', 'LIKE', '%' . $search . '%');
+        }
+
+        return $bike->paginate(25);
     }
 
     /**
