@@ -73,11 +73,20 @@ class BikeRepository
                     case 'class':
                         $bike = $bike->where('Class', $value);
                         break;
+                    case 'reflectors':
+                        $bike = $bike->where('Reflectors', filter_var($value, FILTER_VALIDATE_BOOLEAN));
+                        break;
+                    case 'lights':
+                        $bike = $bike->where('Lights', filter_var($value, FILTER_VALIDATE_BOOLEAN));
+                        break;
+                    case 'bellhorn':
+                        $bike = $bike->where('BellHorn', filter_var($value, FILTER_VALIDATE_BOOLEAN));
+                        break;
                 }
             }
         }
 
-        return $bike->orderBy('LastStatusChanged', 'desc')->paginate(25);
+        return $bike->with('photos')->orderBy('LastStatusChanged', 'desc')->paginate(25);
     }
 
     /**
@@ -106,6 +115,7 @@ class BikeRepository
         $bike->fill($payload);
 
         $bike->generateBikeLabel($max);
+        $bike->LastStatusChanged = new Carbon();
 
         $bike->save();
 
