@@ -69,6 +69,10 @@ class BikeRepository
                     case 'id_status':
                         $bike = $bike->where('ID_Status', $value);
                         break;
+                    case 'class':
+                        $bike = $bike->where('Class', $value);
+                        break;
+
                 }
             }
         }
