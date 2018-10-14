@@ -8,6 +8,7 @@ use App\Models\Bike;
 use App\Models\BikeHistory;
 use App\Models\Status;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -72,12 +73,11 @@ class BikeRepository
                     case 'class':
                         $bike = $bike->where('Class', $value);
                         break;
-
                 }
             }
         }
 
-        return $bike->paginate(25);
+        return $bike->orderBy('LastStatusChanged', 'desc')->paginate(25);
     }
 
     /**
@@ -149,7 +149,8 @@ class BikeRepository
                 $this->bikeHistoryRepository->updateReturnDate($currentBikeHistory);
             }
 
-            $bike->ID_Status = $newStatus;
+            $bike->ID_Status         = $newStatus;
+            $bike->LastStatusChanged = new Carbon();
 
             //update the previous bike history
             $currentBikeHistory->save();
