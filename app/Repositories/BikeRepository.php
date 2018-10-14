@@ -2,12 +2,31 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\InvalidDueDateException;
+use App\Exceptions\InvalidStatusChangeException;
 use App\Models\Bike;
+use App\Models\BikeHistory;
+use App\Models\Status;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class BikeRepository
 {
+    /**
+     * @var BikeHistoryRepository
+     */
+    protected $bikeHistoryRepository;
+
+    /**
+     * BikeRepository constructor.
+     *
+     * @param BikeHistoryRepository $bikeHistoryRepository
+     */
+    public function __construct(BikeHistoryRepository $bikeHistoryRepository)
+    {
+        $this->bikeHistoryRepository = $bikeHistoryRepository;
+    }
+
     /**
      * Return a paginated list of all bikes in the system
      *
@@ -71,6 +90,70 @@ class BikeRepository
 
         $bike->generateBikeLabel($max);
 
+        $bike->save();
+
+        return $bike->fresh();
+    }
+
+    /**
+     * Update a bike's details, creating and updating history items
+     *
+     * @param       $bikeId
+     * @param array $payload
+     *
+     * @return Bike
+     */
+    public function update($bikeId, array $payload)
+    {
+        $bike = $this->fetchById($bikeId);
+
+        //retrieve the most recent history item
+        /** @var BikeHistory $currentBikeHistory */
+        $currentBikeHistory = BikeHistory::where('ID_Bike', $bikeId)->orderBy('CreateDateTime', 'desc')->first();
+
+        $newStatus  = array_get($payload, 'ID_Status');
+        $newDueDate = array_get($payload, 'DueDateTime');
+
+        //determine if state has changed
+        if ($currentBikeHistory->ID_Status != $newStatus) {
+
+            //if the status change is not allowed, reject the request
+            if (!$currentBikeHistory->isStatusChangeAllowed($newStatus)) {
+                throw new InvalidStatusChangeException('Cannot change from status ' . Status::getName($currentBikeHistory->ID_Status) . ' to status ' . Status::getName($newStatus));
+            }
+
+            //if the due date is required but not provided, reject the request
+            if ($currentBikeHistory->isDueDateRequired($newStatus) && empty(array_get($payload, 'DueDateTime'))) {
+                throw new InvalidDueDateException('Due date time required to move to the status ' . Status::getName($newStatus));
+            }
+
+            //if the return date is required, set it
+            if ($currentBikeHistory->isReturnDateRequired($newStatus)) {
+                $this->bikeHistoryRepository->updateReturnDate($currentBikeHistory);
+            }
+
+            $bike->ID_Status = $newStatus;
+
+            //update the previous bike history
+            $currentBikeHistory->save();
+
+            //create a new bike history
+            $this->bikeHistoryRepository->create(
+                $bikeId,
+                $newStatus,
+                array_get($payload, 'ID_BikeUser'),
+                array_get($payload, 'ID_StaffUser')
+            );
+        } elseif ($currentBikeHistory->DueDateTime != $newDueDate) {
+            //if the state has not changed, but the due date has, update the due date
+            $this->bikeHistoryRepository->updateDueDate($currentBikeHistory, $newDueDate);
+        }
+
+        //cannot change serial number after creation
+        unset($payload['SerialNumber']);
+        unset($payload['ID_Status']);
+
+        $bike->fill($payload);
         $bike->save();
 
         return $bike->fresh();

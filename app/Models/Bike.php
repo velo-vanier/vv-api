@@ -32,7 +32,10 @@ class Bike extends Model
     ];
 
     public $casts = [
-        'BellHorn' => 'boolean'
+        'BellHorn'   => 'boolean',
+        'Reflectors' => 'boolean',
+        'Lights'     => 'boolean'
+
     ];
 
     /**
@@ -50,7 +53,9 @@ class Bike extends Model
      */
     public function history()
     {
-        return $this->hasMany(BikeHistory::class, 'ID_Bike', 'ID_Bike');
+        return $this->hasMany(BikeHistory::class, 'ID_Bike', 'ID_Bike')
+                    ->orderBy('CreateDateTime', 'desc')
+                    ->limit(25);
     }
 
     /**
