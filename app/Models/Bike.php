@@ -51,6 +51,16 @@ class Bike extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function current()
+    {
+        return $this->hasMany(BikeHistory::class, 'ID_Bike', 'ID_Bike')
+                    ->orderBy('CreateDateTime', 'desc')
+                    ->limit(1);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function history()
     {
         return $this->hasMany(BikeHistory::class, 'ID_Bike', 'ID_Bike')

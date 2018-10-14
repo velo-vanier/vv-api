@@ -7,6 +7,7 @@ use App\Exceptions\InvalidStatusChangeException;
 use App\Models\Bike;
 use App\Models\BikeHistory;
 use App\Models\Status;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -52,9 +53,21 @@ class BikeRepository
             foreach ($filters as $key => $value) {
                 switch (strtolower($key)) {
                     case 'id_user':
-                        $bike = $bike->whereHas('history', function ($q) use ($value) {
+                        //get the children ids for the user
+                        $children = User::select('ID_User')->where('ParentId', $value)->get()->toArray();
+
+                        $bike = $bike->whereHas('current', function ($q) use ($value, $children) {
                             $q->where('ID_BikeUser', $value);
+
+                            if (!empty($children)) {
+                                foreach ($children as $child) {
+                                    $q->orWhere('ID_BikeUser', array_get($child, 'ID_User'));
+                                }
+                            }
                         });
+                        break;
+                    case 'id_status':
+                        $bike = $bike->where('ID_Status', $value);
                         break;
                 }
             }
