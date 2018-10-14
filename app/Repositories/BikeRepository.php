@@ -56,7 +56,7 @@ class BikeRepository
                         //get the children ids for the user
                         $children = User::select('ID_User')->where('ParentId', $value)->get()->toArray();
 
-                        $bike = $bike->whereHas('current', function ($q) use ($value, $children) {
+                        $bike = $bike->whereHas('currentHistory', function ($q) use ($value, $children) {
                             $q->where('ID_BikeUser', $value);
 
                             if (!empty($children)) {

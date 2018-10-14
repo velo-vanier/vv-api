@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Accessory;
 use App\Repositories\AccessoryRepository;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class AccessoryController extends Controller
 {
@@ -51,23 +53,53 @@ class AccessoryController extends Controller
      *
      * @param Request $request
      *
-     * @return array
+     * @return Accessory
      */
     public function store(Request $request)
     {
-        return $request->all();
+        $validator = Validator::make($request->all(), [
+            'ID_Type'     => 'integer|required|max:100',
+            'ID_Status'   => 'integer|required|max:4',
+            'Name'        => 'string|required|max:50',
+            'Description' => 'string|nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), '422');
+        }
+
+        try {
+            return $this->accessoryRepository->create($request->all());
+        } catch (QueryException $e) {
+            return response(['error' => [$e->getMessage()]], '422');
+        }
     }
 
     /**
-     * Update an accessory in the system
+     * Update a accessory in the system
      *
      * @param         $accessoryId
      * @param Request $request
      *
-     * @return array
+     * @return Accessory
      */
     public function update($accessoryId, Request $request)
     {
-        return array_merge(['id' => $accessoryId], $request->all());
+        $validator = Validator::make($request->all(), [
+            'ID_Type'     => 'integer|required|max:100',
+            'ID_Status'   => 'integer|required|max:4',
+            'Name'        => 'string|required|max:50',
+            'Description' => 'string|nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), '422');
+        }
+
+        try {
+            return $this->accessoryRepository->update($accessoryId, $request->all());
+        } catch (QueryException $e) {
+            return response(['error' => [$e->getMessage()]], '422');
+        }
     }
 }

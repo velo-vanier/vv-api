@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Accessory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 class AccessoryRepository
@@ -27,5 +28,40 @@ class AccessoryRepository
     public function fetchById($accessoryId)
     {
         return Accessory::where('ID_Accessory', (int)$accessoryId)->firstOrFail();
+    }
+
+    /**
+     * Create a new accessory
+     *
+     * @param array $payload
+     *
+     * @return Accessory
+     */
+    public function create(array $payload)
+    {
+        $accessory = new Accessory();
+        $accessory->CreateDateTime = new Carbon();
+        $accessory->fill($payload);
+        $accessory->save();
+
+        return $accessory->fresh();
+    }
+
+    /**
+     * Update an accessory's details
+     *
+     * @param       $accessoryId
+     * @param array $payload
+     *
+     * @return Accessory
+     */
+    public function update($accessoryId, array $payload)
+    {
+        $accessory = $this->fetchById($accessoryId);
+
+        $accessory->fill($payload);
+        $accessory->save();
+
+        return $accessory->fresh();
     }
 }
