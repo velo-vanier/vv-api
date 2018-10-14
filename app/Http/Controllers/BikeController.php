@@ -66,6 +66,9 @@ class BikeController extends Controller
             'Color'        => 'string|nullable|max:45',
             'Class'        => 'string|nullable|max:45',
             'Brand'        => 'string|nullable|max:45',
+            'BellHorn'     => 'boolean|nullable',
+            'Reflectors'   => 'string|nullable|max:2',
+            'Lights'       => 'string|nullable|max:2',
             'ID_Status'    => 'integer|required'
         ]);
 
@@ -76,12 +79,6 @@ class BikeController extends Controller
         try {
             return $this->bikeRepository->create($request->all());
         } catch (QueryException $e) {
-            /*
-            if ($e->getCode() == '23000') {
-                return response(['error' => ['Duplicate key error']], '422');
-            }
-            */
-
             return response(['error' => [$e->getMessage()]], '422');
         }
     }
@@ -92,7 +89,7 @@ class BikeController extends Controller
      * @param         $userId
      * @param Request $request
      *
-     * @return array
+     * @return Bike
      */
     public function update($bikeId, Request $request)
     {
