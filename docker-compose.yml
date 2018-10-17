@@ -5,15 +5,23 @@ services:
     image: busybox
     volumes:
       - .:/var/www/app
-  web:
-    image: vv-api
+
+  nginx:
+    image: vv-api-nginx
     ports:
       - "80:80"
+    links:
+      - fpm
+    volumes_from:
+      - data
+
+  fpm:
+    image: vv-api-fpm
     volumes_from:
       - data
 
   artisan:
-    image: vv-api
+    image: vv-api-fpm
     volumes:
       - .:/var/www/app
     entrypoint: "./artisan"
