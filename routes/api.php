@@ -13,7 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::resource('users', 'UserController')->only(['index', 'show', 'store', 'update']);
-Route::resource('bikes', 'BikeController')->only(['index', 'show', 'store', 'update']);
-Route::resource('accessories', 'AccessoryController')->only(['index', 'show', 'store', 'update']);
-Route::resource('statuses', 'StatusController')->only(['index']);
+Route::post( 'auth/login', 'AuthController@login' );
+Route::get( 'auth/logout', 'AuthController@logout' );
+
+Route::middleware( [ 'jwt.auth' ] )->group( function () {
+	Route::resource( 'users', 'UserController' )->only( [ 'index', 'show', 'store', 'update' ] );
+	Route::resource( 'bikes', 'BikeController' )->only( [ 'index', 'show', 'store', 'update' ] );
+	Route::resource( 'accessories', 'AccessoryController' )->only( [ 'index', 'show', 'store', 'update' ] );
+	Route::resource( 'statuses', 'StatusController' )->only( [ 'index' ] );
+} );
