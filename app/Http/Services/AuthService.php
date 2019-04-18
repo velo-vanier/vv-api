@@ -26,7 +26,7 @@ class AuthService
 	 */
 	public function login( $email, $password )
 	{
-		if ( $password !== env( 'USER_PASSWORD' ) ) {
+		if ( $password !== env( 'JWT_USER_PASSWORD' ) ) {
 			return false;
 		}
 

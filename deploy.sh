@@ -16,11 +16,13 @@ echo
 
 $(aws ecr get-login --no-include-email --region us-east-2 --profile $PROFILE)
 
-docker build -f docker/php71-fpm/Dockerfile -t $REPO_NAME-data .
+docker build -f docker/php71-fpm/Dockerfile -t $REPO_NAME-fpm .
 docker tag $REPO_NAME-fpm:latest $REPO_URL/$REPO_NAME-fpm:latest
 docker push $REPO_URL/$REPO_NAME-fpm:latest
 
-docker build -f docker/nginx/Dockerfile -t $REPO_NAME-nginx .
+cd docker/nginx
+docker build -t $REPO_NAME-nginx .
+cd ../..
 docker tag $REPO_NAME-nginx:latest $REPO_URL/$REPO_NAME-nginx:latest
 docker push $REPO_URL/$REPO_NAME-nginx:latest
 
