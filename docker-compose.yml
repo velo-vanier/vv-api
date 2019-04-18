@@ -1,5 +1,10 @@
 version: "2"
 
+networks:
+  default:
+    external:
+      name: develop
+
 services:
   data:
     image: vv-api-data
@@ -19,10 +24,31 @@ services:
     image: vv-api-fpm
     volumes_from:
       - data
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: BikeShare
+      MYSQL_PASSWORD: BikeSharePassword2018
+      MYSQL_DATABASE: BikeShare_Dev
+    volumes:
+      - mysql:/var/lib/mysql
+
 
   artisan:
     image: vv-api-fpm
     volumes:
       - .:/var/www/app
+    links:
+      - mysql
     entrypoint: "./artisan"
     working_dir: /var/www/app
+
+volumes:
+  mysql:
+    driver: local
