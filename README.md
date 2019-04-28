@@ -74,6 +74,6 @@ should be added to replace this.
 Example: 
 
 ```sh
- curl -H 'Content-Type: application/json' -d '{ "password": "supersecretpassword"}' http://localhost/api/auth/login                                                                                       
-{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6bnVsbCwic3ViIjpudWxsLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNTU2NDAzMzQ1LCJleHAiOjE1NTY0NDY1NDUsIm5iZiI6MTU1NjQwMzM0NSwianRpIjoiaFd5TE5rSkU0RnhJYlliMyJ9.3LR-4CxAjXeewj5tTcdAPXrqRGd6SkeAHEPq5eI_7AE"}%
+curl -H 'Content-Type: application/json' -d '{ "email": "test@example.com", "password": "supersecretpassword"}' http://localhost/api/auth/login
+# => {"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6bnVsbCwic3ViIjpudWxsLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNTU2NDAzMzQ1LCJleHAiOjE1NTY0NDY1NDUsIm5iZiI6MTU1NjQwMzM0NSwianRpIjoiaFd5TE5rSkU0RnhJYlliMyJ9.3LR-4CxAjXeewj5tTcdAPXrqRGd6SkeAHEPq5eI_7AE"}%
 ```
